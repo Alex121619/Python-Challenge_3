@@ -1,0 +1,46 @@
+## Importing the library to read csv
+import csv
+ 
+## Dict created to store the change
+budget_dict={}
+## Variables for month, toal and previous
+total_months=0
+total=0
+previous=0
+flag=0
+
+## Readding csv file
+with open('Resources/budget_data.csv', mode ='r')as file:
+    csvFile = csv.reader(file)
+    for lines in csvFile:
+        if flag == 0:
+            header = lines
+        if flag!=0:
+            total_months+=1
+            current=int(lines[1])
+            if flag==1: first_value=current
+            total+=current
+            change=current - previous
+            budget_dict[lines[0]]=change
+            previous=current
+        flag+=1
+print(header)
+budg_sorted = sorted(budget_dict.items(),key = lambda kv: kv[1],reverse=True)
+average_change = round((current-  first_value)/total_months,2)
+   
+fh = open('Analysis/analysis_bank.txt', 'w')
+print("\nFinancial Analysis")
+fh.write("Financial Analysis\n")
+print("-------------------------")
+fh.write("-------------------------\n")
+print("Total Months: {0}".format(total_months))
+fh.write("Total Months: {0}\n".format(total_months))
+print("Total: ${0}".format(total))
+fh.write("Total: ${0}\n".format(total))
+print("Average Change: ${0}".format(average_change))
+fh.write("Average Change: ${0}\n".format(average_change))
+print("Greatest Increase in Profits: {0} (${1})".format(budg_sorted[0][0],budg_sorted[0][1]))
+fh.write("Greatest Increase in Profits: {0} (${1})\n".format(budg_sorted[0][0],budg_sorted[0][1]))
+print("Greatest Decrease in Profits: {0} (${1})".format(budg_sorted[-1][0],budg_sorted[-1][1]))
+fh.write("Greatest Decrease in Profits: {0} (${1})\n".format(budg_sorted[-1][0],budg_sorted[-1][1]))
+fh.close()

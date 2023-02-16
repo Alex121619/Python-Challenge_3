@@ -1,0 +1,38 @@
+## Importing the library to read csv
+import csv
+ 
+election_dict={}
+votes=0
+flag=0
+with open('Resources/election_data.csv', mode ='r')as file:
+    csvFile = csv.reader(file)
+    for lines in csvFile:
+        if flag!=0:
+            votes+=1
+            if lines[2] not in election_dict:
+                election_dict[lines[2]]=1
+            else:
+                election_dict[lines[2]]+=1
+        flag+=1
+        
+fh = open('Analysis/analysis_election.txt', 'w')
+    
+print("\nElection Results")
+fh.write("Election Results\n")
+print("-------------------------")
+fh.write("-------------------------\n")
+print("Total Votes: {0}".format(votes))
+fh.write("Total Votes: {0}\n".format(votes))
+print("-------------------------")
+fh.write("-------------------------\n")
+for name in election_dict:
+    percentage = round((election_dict[name]/votes)*100,3)
+    print("{0}: {1}% ({2})".format(name, percentage, election_dict[name]))
+    fh.write("{0}: {1}% ({2})\n".format(name, percentage, election_dict[name]))
+print("-------------------------")
+fh.write("-------------------------\n")
+elect_sorted = sorted(election_dict.items(),key = lambda kv: kv[1],reverse=True)
+print("Winner: {0}".format(elect_sorted[0][0]))
+fh.write("Winner: {0}\n".format(elect_sorted[0][0]))
+print("-------------------------")
+fh.write("-------------------------\n")
